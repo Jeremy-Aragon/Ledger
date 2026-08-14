@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transactions — Ledger</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/user-info.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="mark">L</div>
+      <span class="name">Ledger</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+        Dashboard
+      </a>
+      <a href="transactions.html" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M9 8h6M9 12h6"/></svg>
+        Transactions
+      </a>
+      <a href="advisor.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Advisor
+      </a>
+      <a href="settings.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="avatar" id="sidebarAvatar">•</div>
+      <div class="who">
+        <span class="label" id="sidebarName">Loading…</span>
+        <span class="sub" id="sidebarSub"></span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">All activity</p>
+        <h1>Transactions</h1>
+      </div>
+      <button class="btn btn-clay" onclick="document.getElementById('addPanel').classList.toggle('open')">+ Add transaction</button>
+    </div>
+
+    <!-- Add transaction (collapsible) -->
+    <div id="addPanel" class="card" style="margin-bottom:20px; display:none;">
+      <p class="card-label" style="margin-bottom:14px;">New transaction</p>
+      <form id="txForm" style="display:grid; grid-template-columns: 1fr 1fr; gap:0 20px;">
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="txDescription" placeholder="e.g. Lumier Café" required>
+        </div>
+        <div class="field">
+          <label>Amount (₱)</label>
+          <input type="number" id="txAmount" step="0.01" placeholder="0.00" required>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="txCategory" required></select>
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="txDate" required>
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <label>Type</label>
+          <select id="txType">
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+        <div style="grid-column: 1 / -1; display:flex; gap:10px;">
+          <button type="submit" class="btn btn-primary" id="txSubmit">Save transaction</button>
+          <button type="button" class="btn btn-ghost" onclick="document.getElementById('addPanel').classList.remove('open')">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Filters -->
+    <div class="card" style="margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap; padding:16px 20px;">
+      <select id="filterCategory" style="padding:9px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-alt); font-size:13.5px;">
+        <option value="">All categories</option>
+      </select>
+      <input type="text" id="filterSearch" placeholder="Search transactions…" style="flex:1; min-width:180px; padding:9px 14px; border-radius:999px; border:1px solid var(--border); background:var(--surface-alt); font-size:13.5px;">
+    </div>
+
+    <!-- Transaction list -->
+    <div class="card">
+      <div class="tx-list" id="txListContainer">
+        <p style="font-size:13.5px; color:var(--text-tertiary); padding:10px 0;">Loading…</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<nav class="mobile-nav">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="transactions.html" class="active">Transactions</a>
+  <a href="advisor.html">Advisor</a>
+  <a href="settings.html">Settings</a>
+</nav>
+
+<style>
+  #addPanel.open { display: block !important; }
+  @media (max-width: 700px) {
+    #txForm { grid-template-columns: 1fr !important; }
+    .tx-row { grid-template-columns: 32px 1fr auto !important; }
+    .tx-row .tx-category-tag, .tx-row .btn-icon { display: none; }
+  }
+</style>
+
+<script src="js/transactions.js"></script>
+
+</body>
+</html>

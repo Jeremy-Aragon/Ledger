@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Ledger</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <div class="auth-visual">
+    <div class="mark">L</div>
+    <div>
+      <p class="quote">"Money is a way of keeping track of what you actually value."</p>
+      <p class="quote-sub">A calmer way to see where it's all going.</p>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to see your dashboard.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:13px;">Sign in</button>
+      </form>
+
+      <div class="auth-divider">or</div>
+
+      <button class="btn btn-ghost" style="width:100%; justify-content:center; padding:12px;">Continue with Google</button>
+
+      <p class="auth-toggle">Don't have an account? <a href="#">Create one</a></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Placeholder auth — Supabase wiring comes next.
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    window.location.href = 'dashboard.html';
+  });
+</script>
+
+</body>
+</html>

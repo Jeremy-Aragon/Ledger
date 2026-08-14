@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advisor — Ledger</title>
+<link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/user-info.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="mark">L</div>
+      <span class="name">Ledger</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+        Dashboard
+      </a>
+      <a href="transactions.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"/><path d="M9 8h6M9 12h6"/></svg>
+        Transactions
+      </a>
+      <a href="advisor.html" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Advisor
+      </a>
+      <a href="settings.html" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="avatar" id="sidebarAvatar">•</div>
+      <div class="who">
+        <span class="label" id="sidebarName">Loading…</span>
+        <span class="sub" id="sidebarSub"></span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">Ask about your money</p>
+        <h1>Advisor</h1>
+      </div>
+    </div>
+
+    <div class="advisor-layout">
+
+      <div class="card chat-panel">
+        <div class="chat-scroll" id="chatScroll">
+
+          <div class="msg assistant">
+            <div class="msg-avatar">✦</div>
+            <div class="msg-bubble">
+              Hi Jeremy — I can see your transactions and budgets. Ask me anything, like "where am I overspending?" or "can I afford ₱5,000 this week?"
+            </div>
+          </div>
+
+          <div class="msg user">
+            <div class="msg-avatar">J</div>
+            <div class="msg-bubble">How's my spending looking this month?</div>
+          </div>
+
+          <div class="msg assistant">
+            <div class="msg-avatar">✦</div>
+            <div class="msg-bubble">
+              You're at ₱18,150 spent this month, mostly in Bills (90% of budget) and Food (68%). Bills is close to its limit — if the Meralco bill pattern holds, you may go over by ~₱500. Everything else is comfortably on track.
+            </div>
+          </div>
+
+        </div>
+
+        <form class="chat-input-row" id="chatForm">
+          <input type="text" id="chatInput" placeholder="Ask your advisor…" autocomplete="off">
+          <button type="submit" class="btn btn-primary" style="padding:12px 20px;">Send</button>
+        </form>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:16px;">
+          <p class="card-label" style="margin-bottom:10px;">Try asking</p>
+          <button class="suggested-q" type="button">Where am I overspending?</button>
+          <button class="suggested-q" type="button">Can I afford ₱5,000 this week?</button>
+          <button class="suggested-q" type="button">Summarize this month vs. last</button>
+          <button class="suggested-q" type="button">How much am I saving on average?</button>
+        </div>
+        <div class="card">
+          <p class="card-label" style="margin-bottom:6px;">About this advisor</p>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+            Answers are generated by Gemini using your real transaction data — not generic advice. This is a UI preview; live answers connect once Gemini is wired in.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<nav class="mobile-nav">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="transactions.html">Transactions</a>
+  <a href="advisor.html" class="active">Advisor</a>
+  <a href="settings.html">Settings</a>
+</nav>
+
+<script>
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput');
+  const chatScroll = document.getElementById('chatScroll');
+
+  function addMessage(text, role) {
+    const msg = document.createElement('div');
+    msg.className = 'msg ' + role;
+    msg.innerHTML = `
+      <div class="msg-avatar">${role === 'user' ? 'J' : '✦'}</div>
+      <div class="msg-bubble"></div>
+    `;
+    msg.querySelector('.msg-bubble').textContent = text;
+    chatScroll.appendChild(msg);
+    chatScroll.scrollTop = chatScroll.scrollHeight;
+  }
+
+  chatForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    chatInput.value = '';
+    setTimeout(function () {
+      addMessage('This is a UI preview — I\'ll give real, data-grounded answers once Gemini is connected.', 'assistant');
+    }, 500);
+  });
+
+  document.querySelectorAll('.suggested-q').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      chatInput.value = btn.textContent;
+      chatForm.requestSubmit();
+    });
+  });
+</script>
+
+</body>
+</html>
